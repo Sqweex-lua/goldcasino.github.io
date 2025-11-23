@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GoldCasino</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -121,6 +122,23 @@
             transform: translateY(-1px);
         }
         
+        .btn-telegram {
+            background: linear-gradient(145deg, #0088cc, #006699);
+            color: white;
+            font-weight: 600;
+            border: none;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+            padding: 10px 16px;
+            font-size: 0.9rem;
+        }
+        
+        .btn-telegram:hover {
+            background: linear-gradient(145deg, #0099dd, #0077aa);
+            transform: translateY(-1px);
+        }
+        
         .jackpot {
             background: linear-gradient(90deg, #ffd700, #ffed4e, #ffd700);
             background-size: 200% 100%;
@@ -185,7 +203,7 @@
                 font-size: 1.7rem;
             }
             
-            .btn-gold, .btn-demo {
+            .btn-gold, .btn-demo, .btn-telegram {
                 padding: 12px 20px;
                 font-size: 1rem;
             }
@@ -296,6 +314,16 @@
         .balance-container:hover .balance-dropdown {
             display: block;
         }
+        
+        .telegram-user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -312,7 +340,7 @@
                 <div class="balance-container relative">
                     <button class="bg-gradient-to-r from-yellow-700 to-yellow-900 text-white px-3 py-1.5 rounded-lg flex items-center space-x-1 text-sm">
                         <i class="fas fa-star star-icon text-xs"></i>
-                        <span id="balance">100</span>
+                        <span id="balance">0</span>
                     </button>
                     <div class="balance-dropdown">
                         <button id="withdrawBtn" class="btn-gold w-full mb-2">
@@ -332,9 +360,30 @@
     <!-- Главный экран с выбором игры -->
     <main class="flex-1 p-3 mobile-padding" id="mainScreen">
         <div class="max-w-md mx-auto">
+            <!-- Информация о пользователе Telegram -->
+            <div class="card p-4 mb-4" id="telegramUserInfo" style="display: none;">
+                <div class="telegram-user">
+                    <img id="userAvatar" src="" class="w-10 h-10 rounded-full">
+                    <div>
+                        <div class="font-bold gold-text" id="userName"></div>
+                        <div class="text-xs text-gray-400">ID: <span id="userId"></span></div>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-400 text-center">Играйте за Telegram Stars! 🎰</p>
+            </div>
+
             <div class="card p-6 text-center mb-6">
                 <h2 class="text-2xl font-bold gold-text mb-2">Добро пожаловать в GoldCasino!</h2>
                 <p class="text-gray-400 mb-4">Играйте за Telegram Stars</p>
+                
+                <!-- Кнопка пополнения баланса -->
+                <div class="mb-6 p-4 bg-gradient-to-r from-yellow-900/20 to-yellow-700/20 rounded-lg">
+                    <p class="text-gray-400 mb-2">Для игры нужны Telegram Stars</p>
+                    <button id="addStarsBtn" class="btn-telegram w-full mb-2">
+                        <i class="fab fa-telegram mr-2"></i>Пополнить баланс
+                    </button>
+                    <p class="text-xs text-gray-400">Нажмите, чтобы добавить Stars через Telegram</p>
+                </div>
                 
                 <div class="grid grid-cols-1 gap-4 mt-6">
                     <div class="game-card card p-5" data-game="slots">
@@ -384,7 +433,7 @@
                     <h2 class="text-xl font-bold gold-text mobile-text-lg">Фруктовые Слоты</h2>
                     <div class="flex items-center space-x-1 bg-gradient-to-r from-yellow-900/30 to-yellow-700/30 px-3 py-1.5 rounded-lg text-sm">
                         <i class="fas fa-star star-icon text-xs"></i>
-                        <span class="font-bold">Баланс: <span class="gold-text" id="currentBalance">100</span>⭐</span>
+                        <span class="font-bold">Баланс: <span class="gold-text" id="currentBalance">0</span>⭐</span>
                     </div>
                 </div>
 
@@ -476,7 +525,7 @@
                     <h2 class="text-xl font-bold gold-text mobile-text-lg">Минёр</h2>
                     <div class="flex items-center space-x-1 bg-gradient-to-r from-yellow-900/30 to-yellow-700/30 px-3 py-1.5 rounded-lg text-sm">
                         <i class="fas fa-star star-icon text-xs"></i>
-                        <span class="font-bold">Баланс: <span class="gold-text" id="minesBalance">100</span>⭐</span>
+                        <span class="font-bold">Баланс: <span class="gold-text" id="minesBalance">0</span>⭐</span>
                     </div>
                 </div>
 
@@ -583,13 +632,14 @@
             token: "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",
             owner: "Sqweex-lua",
             repo: "goldcasino.github.io",
-            path: "data/users.json"
+            path: "data/users.json",
+            branch: "main"
         };
 
         // Игровые переменные
         let userData = {
-            user_id: "user_" + Math.random().toString(36).substr(2, 9),
-            balance: 100,
+            user_id: "",
+            balance: 0, // Стартовый баланс 0
             game_stats: {
                 slots: {
                     total_spins: 0,
@@ -614,6 +664,7 @@
         let currentScreen = 'main';
         let isSpinning = false;
         let isDemoSpin = false;
+        let tg = null;
         
         // Переменные для игры "Минёр"
         let minesGameActive = false;
@@ -646,11 +697,56 @@
         const confirmWithdraw = document.getElementById('confirmWithdraw');
         const cancelWithdraw = document.getElementById('cancelWithdraw');
         const withdrawAmountBtns = document.querySelectorAll('.withdraw-amount-btn');
+        const addStarsBtn = document.getElementById('addStarsBtn');
+        const telegramUserInfo = document.getElementById('telegramUserInfo');
+        const userAvatar = document.getElementById('userAvatar');
+        const userName = document.getElementById('userName');
+        const userId = document.getElementById('userId');
         const reels = [
             document.getElementById('reel1'),
             document.getElementById('reel2'),
             document.getElementById('reel3')
         ];
+
+        // Инициализация Telegram Web App
+        function initTelegramWebApp() {
+            if (window.Telegram && Telegram.WebApp) {
+                tg = Telegram.WebApp;
+                
+                // Расширяем на весь экран
+                tg.expand();
+                
+                // Получаем данные пользователя
+                const user = tg.initDataUnsafe?.user;
+                
+                if (user) {
+                    // Устанавливаем ID пользователя из Telegram
+                    userData.user_id = "tg_" + user.id;
+                    
+                    // Показываем информацию о пользователе
+                    telegramUserInfo.style.display = 'block';
+                    userName.textContent = user.first_name + (user.last_name ? ' ' + user.last_name : '');
+                    userId.textContent = user.id;
+                    
+                    if (user.photo_url) {
+                        userAvatar.src = user.photo_url;
+                    } else {
+                        userAvatar.style.display = 'none';
+                    }
+                    
+                    console.log("Telegram user loaded:", user);
+                }
+                
+                // Загружаем данные пользователя
+                loadUserData();
+                
+            } else {
+                console.log("Not in Telegram Web App");
+                // Загружаем данные для веб-версии
+                userData.user_id = "web_" + Math.random().toString(36).substr(2, 9);
+                loadUserData();
+            }
+        }
 
         // GitHub API функции
         async function saveUserData() {
@@ -699,7 +795,8 @@
                 console.log('Data saved successfully');
             } catch (error) {
                 console.error('Error saving data:', error);
-                // В реальном приложении здесь должна быть обработка ошибок
+                // Сохраняем в localStorage как fallback
+                localStorage.setItem('goldcasino_user_data', JSON.stringify(userData));
             }
         }
 
@@ -724,7 +821,15 @@
                 }
             } catch (error) {
                 console.error('Error loading data:', error);
-                // Используем данные по умолчанию
+                // Пробуем загрузить из localStorage
+                const saved = localStorage.getItem('goldcasino_user_data');
+                if (saved) {
+                    const savedData = JSON.parse(saved);
+                    if (savedData.user_id === userData.user_id) {
+                        userData = savedData;
+                        updateUI();
+                    }
+                }
             }
         }
 
@@ -765,6 +870,14 @@
             
             totalWonElement.textContent = totalWon + " ⭐";
             totalGamesElement.textContent = totalGames;
+        }
+
+        // Функция для пополнения баланса (эмуляция Telegram Stars)
+        function addStars(amount) {
+            userData.balance += amount;
+            updateUI();
+            saveUserData();
+            showNotification(`Баланс пополнен на ${amount} звезд!`, 'success');
         }
 
         // Функции для игры "Слоты"
@@ -816,7 +929,7 @@
             if (isSpinning) return;
             
             if (!isDemoSpin && userData.balance < 1) {
-                showNotification('Недостаточно звезд!', 'error');
+                showNotification('Недостаточно звезд! Пополните баланс.', 'error');
                 return;
             }
 
@@ -1083,8 +1196,8 @@
 
         // Инициализация игры
         document.addEventListener('DOMContentLoaded', function() {
-            // Загружаем данные пользователя
-            loadUserData();
+            // Инициализируем Telegram Web App
+            initTelegramWebApp();
 
             // Обработчики для выбора игры
             document.querySelectorAll('.game-card').forEach(card => {
@@ -1106,6 +1219,13 @@
             document.querySelector('.demo-slots-btn').addEventListener('click', function(e) {
                 e.stopPropagation();
                 showScreen('slots');
+            });
+
+            // Кнопка пополнения баланса
+            addStarsBtn.addEventListener('click', function() {
+                // В реальном приложении здесь будет интеграция с Telegram Payments
+                // Для демо просто добавляем звезды
+                addStars(100);
             });
 
             // Обработчик кнопки "Назад"
