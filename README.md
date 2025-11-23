@@ -1,1 +1,1176 @@
-# goldcasino.github.io
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoldCasino</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #FFD700;
+            --dark-gold: #b8860b;
+            --dark-bg: #0c0c0c;
+            --card-bg: #1a1a1a;
+        }
+        
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #1a1a1a 100%);
+            color: #e0e0e0;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+        
+        .header-transparent {
+            background: rgba(0, 0, 0, 0.7) !important;
+            backdrop-filter: blur(10px);
+        }
+        
+        .card {
+            background: linear-gradient(145deg, var(--card-bg), #222222);
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5),
+                        -1px -1px 5px rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+        
+        .gold-text {
+            color: var(--gold);
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+        }
+        
+        .slot-machine {
+            background: linear-gradient(145deg, #0f0f0f, #1a1a1a);
+            border: 2px solid rgba(255, 215, 0, 0.2);
+            border-radius: 12px;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8),
+                        0 0 20px rgba(255, 215, 0, 0.1);
+        }
+        
+        .slot-reel {
+            background: linear-gradient(145deg, #121212, #0a0a0a);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            height: 180px;
+        }
+        
+        .slot-items {
+            position: absolute;
+            width: 100%;
+            transition: transform 0.1s linear;
+        }
+        
+        .slot-item {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--gold);
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.7);
+        }
+        
+        .btn-gold {
+            background: linear-gradient(145deg, var(--dark-gold), #daa520);
+            color: #000;
+            font-weight: 600;
+            border: none;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+            padding: 10px 16px;
+            font-size: 0.9rem;
+        }
+        
+        .btn-gold:hover, .btn-gold:active {
+            background: linear-gradient(145deg, #daa520, #ffd700);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        }
+        
+        .btn-gold:active {
+            transform: translateY(1px);
+        }
+        
+        .btn-demo {
+            background: linear-gradient(145deg, #4a5568, #2d3748);
+            color: #e2e8f0;
+            font-weight: 600;
+            border: none;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+            padding: 10px 16px;
+            font-size: 0.9rem;
+        }
+        
+        .btn-demo:hover {
+            background: linear-gradient(145deg, #5a6575, #3d4757);
+            transform: translateY(-1px);
+        }
+        
+        .jackpot {
+            background: linear-gradient(90deg, #ffd700, #ffed4e, #ffd700);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        .pulse-gold {
+            animation: pulse-gold 2s infinite;
+        }
+        
+        @keyframes pulse-gold {
+            0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4); }
+            70% { box-shadow: 0 0 0 8px rgba(255, 215, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+        }
+        
+        .win-animation {
+            animation: win-pulse 0.5s 3;
+        }
+        
+        @keyframes win-pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .auto-spin-active {
+            background: linear-gradient(145deg, #ff3333, #cc0000) !important;
+            color: white !important;
+        }
+        
+        .game-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 215, 0, 0.2);
+        }
+        
+        .star-icon {
+            color: #FFD700;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+        }
+        
+        /* Мобильная оптимизация */
+        @media (max-width: 640px) {
+            .slot-reel {
+                height: 140px;
+            }
+            
+            .slot-item {
+                height: 46px;
+                font-size: 1.7rem;
+            }
+            
+            .btn-gold, .btn-demo {
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+            
+            .mobile-padding {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+            
+            .mobile-text-sm {
+                font-size: 0.9rem;
+            }
+            
+            .mobile-text-lg {
+                font-size: 1.1rem;
+            }
+        }
+        
+        /* Анимации перехода между экранами */
+        .screen {
+            transition: opacity 0.3s ease;
+        }
+        
+        .screen.hidden {
+            display: none;
+            opacity: 0;
+        }
+        
+        .screen.active {
+            display: block;
+            opacity: 1;
+        }
+        
+        /* Стили для игры "Минёр" */
+        .mine-field {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin: 20px 0;
+        }
+        
+        .mine-cell {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .mine-cell:hover {
+            background: linear-gradient(145deg, #3a3a3a, #2a2a2a);
+            border-color: rgba(255, 215, 0, 0.6);
+        }
+        
+        .mine-cell.revealed {
+            background: linear-gradient(145deg, #1a3a1a, #0a2a0a);
+            border-color: rgba(0, 255, 0, 0.5);
+        }
+        
+        .mine-cell.mine {
+            background: linear-gradient(145deg, #3a1a1a, #2a0a0a);
+            border-color: rgba(255, 0, 0, 0.5);
+        }
+        
+        .mine-cell.mine::after {
+            content: "💣";
+        }
+        
+        .mine-cell.gem::after {
+            content: "💎";
+        }
+        
+        /* Анимация вращения слотов */
+        .reel-spinning {
+            animation: reel-spin 0.1s linear infinite;
+        }
+        
+        @keyframes reel-spin {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-360px); }
+        }
+        
+        /* Стили для вывода средств */
+        .withdraw-modal {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+        }
+        
+        .balance-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 8px;
+            padding: 10px;
+            min-width: 200px;
+            z-index: 1000;
+        }
+        
+        .balance-container:hover .balance-dropdown {
+            display: block;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="header-transparent border-b border-gold-800/30 py-3 px-4 sticky top-0 z-10">
+        <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-600 to-yellow-800 flex items-center justify-center">
+                    <i class="fas fa-crown text-white text-sm"></i>
+                </div>
+                <h1 class="text-lg font-bold gold-text mobile-text-lg">GoldCasino</h1>
+            </div>
+            <div class="flex space-x-3">
+                <div class="balance-container relative">
+                    <button class="bg-gradient-to-r from-yellow-700 to-yellow-900 text-white px-3 py-1.5 rounded-lg flex items-center space-x-1 text-sm">
+                        <i class="fas fa-star star-icon text-xs"></i>
+                        <span id="balance">100</span>
+                    </button>
+                    <div class="balance-dropdown">
+                        <button id="withdrawBtn" class="btn-gold w-full mb-2">
+                            <i class="fas fa-wallet mr-2"></i>Вывести
+                        </button>
+                        <p class="text-xs text-gray-400 text-center">Демо-прокруты: <span id="demoSpins">5</span></p>
+                    </div>
+                </div>
+                <button id="backButton" class="bg-gradient-to-r from-gray-700 to-gray-900 text-white px-3 py-1.5 rounded-lg flex items-center space-x-1 text-sm hidden">
+                    <i class="fas fa-arrow-left text-xs"></i>
+                    <span>Назад</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Главный экран с выбором игры -->
+    <main class="flex-1 p-3 mobile-padding" id="mainScreen">
+        <div class="max-w-md mx-auto">
+            <div class="card p-6 text-center mb-6">
+                <h2 class="text-2xl font-bold gold-text mb-2">Добро пожаловать в GoldCasino!</h2>
+                <p class="text-gray-400 mb-4">Играйте за Telegram Stars</p>
+                
+                <div class="grid grid-cols-1 gap-4 mt-6">
+                    <div class="game-card card p-5" data-game="slots">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-yellow-600 to-yellow-800 flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-sliders-h text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold gold-text mb-2">Фруктовые Слоты</h3>
+                        <p class="text-gray-400 text-sm mb-3">1 звезда = 5 прокрутов</p>
+                        <div class="flex space-x-2">
+                            <div class="btn-gold flex-1">Играть за 1⭐</div>
+                            <button class="btn-demo demo-slots-btn flex-1">Демо</button>
+                        </div>
+                    </div>
+                    
+                    <div class="game-card card p-5" data-game="mines">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-bomb text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold gold-text mb-2">Минёр</h3>
+                        <p class="text-gray-400 text-sm mb-3">20 звезд за игру</p>
+                        <div class="btn-gold w-full">Играть за 20⭐</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card p-4 text-center">
+                <h3 class="text-lg font-bold gold-text mb-2">Статистика</h3>
+                <div class="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                        <p class="text-gray-400">Всего выиграно</p>
+                        <p class="gold-text font-bold" id="totalWon">0 ⭐</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-400">Сыграно игр</p>
+                        <p class="gold-text font-bold" id="totalGames">0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Экран слотов -->
+    <main class="flex-1 p-3 mobile-padding hidden screen" id="slotsScreen">
+        <div class="max-w-md mx-auto">
+            <div class="card p-4 mb-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold gold-text mobile-text-lg">Фруктовые Слоты</h2>
+                    <div class="flex items-center space-x-1 bg-gradient-to-r from-yellow-900/30 to-yellow-700/30 px-3 py-1.5 rounded-lg text-sm">
+                        <i class="fas fa-star star-icon text-xs"></i>
+                        <span class="font-bold">Баланс: <span class="gold-text" id="currentBalance">100</span>⭐</span>
+                    </div>
+                </div>
+
+                <!-- Slot Machine -->
+                <div class="slot-machine p-4 mb-4">
+                    <div class="flex justify-between mb-6">
+                        <div class="slot-reel w-20">
+                            <div class="slot-items" id="reel1">
+                                <div class="slot-item">🍒</div>
+                                <div class="slot-item">🍋</div>
+                                <div class="slot-item">🍊</div>
+                                <div class="slot-item">🍇</div>
+                                <div class="slot-item">🍉</div>
+                                <div class="slot-item">🍓</div>
+                                <div class="slot-item">🍒</div>
+                                <div class="slot-item">🍋</div>
+                                <div class="slot-item">🍊</div>
+                                <div class="slot-item">🍇</div>
+                                <div class="slot-item">🍉</div>
+                                <div class="slot-item">🍓</div>
+                            </div>
+                        </div>
+                        <div class="slot-reel w-20">
+                            <div class="slot-items" id="reel2">
+                                <div class="slot-item">🍒</div>
+                                <div class="slot-item">🍋</div>
+                                <div class="slot-item">🍊</div>
+                                <div class="slot-item">🍇</div>
+                                <div class="slot-item">🍉</div>
+                                <div class="slot-item">🍓</div>
+                                <div class="slot-item">🍒</div>
+                                <div class="slot-item">🍋</div>
+                                <div class="slot-item">🍊</div>
+                                <div class="slot-item">🍇</div>
+                                <div class="slot-item">🍉</div>
+                                <div class="slot-item">🍓</div>
+                            </div>
+                        </div>
+                        <div class="slot-reel w-20">
+                            <div class="slot-items" id="reel3">
+                                <div class="slot-item">🍒</div>
+                                <div class="slot-item">🍋</div>
+                                <div class="slot-item">🍊</div>
+                                <div class="slot-item">🍇</div>
+                                <div class="slot-item">🍉</div>
+                                <div class="slot-item">🍓</div>
+                                <div class="slot-item">🍒</div>
+                                <div class="slot-item">🍋</div>
+                                <div class="slot-item">🍊</div>
+                                <div class="slot-item">🍇</div>
+                                <div class="slot-item">🍉</div>
+                                <div class="slot-item">🍓</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <button id="spinButton" class="btn-gold flex items-center space-x-2 flex-1 mr-2 justify-center">
+                            <i class="fas fa-play"></i>
+                            <span>Крутить (1⭐)</span>
+                        </button>
+                        <button id="demoSpinButton" class="btn-demo flex items-center space-x-2 flex-1 ml-2 justify-center">
+                            <i class="fas fa-play"></i>
+                            <span>Демо (<span id="demoSpinsCount">5</span>)</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Game Info -->
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <div class="card p-3 text-center">
+                        <p class="text-gray-400 mb-1 mobile-text-sm">Выигрыш</p>
+                        <p class="text-lg font-bold text-green-400 mobile-text-lg" id="winAmount">0 ⭐</p>
+                    </div>
+                    <div class="card p-3 text-center">
+                        <p class="text-gray-400 mb-1 mobile-text-sm">Множитель</p>
+                        <p class="text-lg font-bold text-blue-400 mobile-text-lg" id="multiplier">x1</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Экран игры "Минёр" -->
+    <main class="flex-1 p-3 mobile-padding hidden screen" id="minesScreen">
+        <div class="max-w-md mx-auto">
+            <div class="card p-4 mb-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold gold-text mobile-text-lg">Минёр</h2>
+                    <div class="flex items-center space-x-1 bg-gradient-to-r from-yellow-900/30 to-yellow-700/30 px-3 py-1.5 rounded-lg text-sm">
+                        <i class="fas fa-star star-icon text-xs"></i>
+                        <span class="font-bold">Баланс: <span class="gold-text" id="minesBalance">100</span>⭐</span>
+                    </div>
+                </div>
+
+                <div class="text-center mb-4">
+                    <p class="text-gray-400 mb-2">Найдите алмазы, избегая мин. Чем больше алмазов найдете - тем выше выигрыш!</p>
+                    <div class="flex justify-center space-x-4">
+                        <div class="flex items-center">
+                            <div class="mine-cell gem mr-2"></div>
+                            <span class="text-sm">Алмаз = x2</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="mine-cell mine mr-2"></div>
+                            <span class="text-sm">Мина = проигрыш</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mine-field" id="mineField">
+                    <!-- Поле мин будет сгенерировано JavaScript -->
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <div class="card p-3 text-center">
+                        <p class="text-gray-400 mb-1 mobile-text-sm">Ставка</p>
+                        <p class="text-lg font-bold gold-text mobile-text-lg">20 ⭐</p>
+                    </div>
+                    <div class="card p-3 text-center">
+                        <p class="text-gray-400 mb-1 mobile-text-sm">Текущий множитель</p>
+                        <p class="text-lg font-bold text-green-400 mobile-text-lg" id="minesMultiplier">x1</p>
+                    </div>
+                    <div class="card p-3 text-center">
+                        <p class="text-gray-400 mb-1 mobile-text-sm">Найдено алмазов</p>
+                        <p class="text-lg font-bold text-blue-400 mobile-text-lg" id="gemsFound">0</p>
+                    </div>
+                    <div class="card p-3 text-center">
+                        <p class="text-gray-400 mb-1 mobile-text-sm">Макс. выигрыш</p>
+                        <p class="text-lg font-bold jackpot mobile-text-lg" id="maxWin">0 ⭐</p>
+                    </div>
+                </div>
+
+                <div class="flex justify-between">
+                    <button id="cashoutButton" class="btn-gold flex items-center space-x-2 flex-1 mr-2 justify-center">
+                        <i class="fas fa-hand-holding-usd"></i>
+                        <span>Забрать</span>
+                    </button>
+                    <button id="newGameButton" class="bg-gradient-to-r from-gray-700 to-gray-900 text-white flex items-center space-x-2 flex-1 ml-2 justify-center rounded-lg py-2.5 px-4">
+                        <i class="fas fa-redo"></i>
+                        <span>Новая игра (20⭐)</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Модальное окно вывода -->
+    <div id="withdrawModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="withdraw-modal card p-6 max-w-sm w-full mx-4">
+            <h3 class="text-xl font-bold gold-text mb-4 text-center">Вывод средств</h3>
+            <p class="text-gray-400 text-center mb-4">Выберите сумму для вывода</p>
+            
+            <div class="grid grid-cols-2 gap-3 mb-4">
+                <button class="withdraw-amount-btn bg-gradient-to-r from-gray-700 to-gray-900 text-white p-3 rounded-lg text-center" data-amount="15">
+                    <div class="text-lg font-bold">15 ⭐</div>
+                </button>
+                <button class="withdraw-amount-btn bg-gradient-to-r from-gray-700 to-gray-900 text-white p-3 rounded-lg text-center" data-amount="25">
+                    <div class="text-lg font-bold">25 ⭐</div>
+                </button>
+                <button class="withdraw-amount-btn bg-gradient-to-r from-gray-700 to-gray-900 text-white p-3 rounded-lg text-center" data-amount="50">
+                    <div class="text-lg font-bold">50 ⭐</div>
+                </button>
+                <button class="withdraw-amount-btn bg-gradient-to-r from-gray-700 to-gray-900 text-white p-3 rounded-lg text-center" data-amount="100">
+                    <div class="text-lg font-bold">100 ⭐</div>
+                </button>
+            </div>
+            
+            <div class="flex space-x-2">
+                <button id="confirmWithdraw" class="btn-gold flex-1">Подтвердить</button>
+                <button id="cancelWithdraw" class="bg-gradient-to-r from-gray-700 to-gray-900 text-white flex-1 py-2 rounded-lg">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-black/80 backdrop-blur-md border-t border-gold-800/30 py-3 px-4">
+        <div class="flex flex-col justify-center items-center">
+            <div class="flex items-center space-x-2 mb-2">
+                <div class="w-5 h-5 rounded-full bg-gradient-to-br from-yellow-600 to-yellow-800 flex items-center justify-center">
+                    <i class="fas fa-crown text-white text-xs"></i>
+                </div>
+                <span class="text-xs">GoldCasino © 2025</span>
+            </div>
+            <div class="flex space-x-4">
+                <a href="https://t.me/goldcasino_bot" class="text-gray-400 hover:text-yellow-400 transition-colors text-sm flex items-center space-x-1">
+                    <i class="fab fa-telegram"></i>
+                    <span>Наш Telegram</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Конфигурация GitHub
+        const GITHUB_CONFIG = {
+            token: "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",
+            owner: "Sqweex-lua",
+            repo: "goldcasino.github.io",
+            path: "data/users.json"
+        };
+
+        // Игровые переменные
+        let userData = {
+            user_id: "user_" + Math.random().toString(36).substr(2, 9),
+            balance: 100,
+            game_stats: {
+                slots: {
+                    total_spins: 0,
+                    wins: 0,
+                    losses: 0,
+                    total_won: 0,
+                    demo_spins_used: 0
+                },
+                mines: {
+                    games_played: 0,
+                    wins: 0,
+                    losses: 0,
+                    total_won: 0
+                }
+            },
+            withdrawal_history: [],
+            demo_spins_available: 5,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+        };
+
+        let currentScreen = 'main';
+        let isSpinning = false;
+        let isDemoSpin = false;
+        
+        // Переменные для игры "Минёр"
+        let minesGameActive = false;
+        let gemsFound = 0;
+        let minesMultiplier = 1;
+        let mineField = [];
+        let selectedWithdrawAmount = 0;
+        
+        // DOM элементы
+        const balanceElement = document.getElementById('balance');
+        const currentBalanceElement = document.getElementById('currentBalance');
+        const minesBalanceElement = document.getElementById('minesBalance');
+        const winAmountElement = document.getElementById('winAmount');
+        const multiplierElement = document.getElementById('multiplier');
+        const minesMultiplierElement = document.getElementById('minesMultiplier');
+        const gemsFoundElement = document.getElementById('gemsFound');
+        const maxWinElement = document.getElementById('maxWin');
+        const demoSpinsElement = document.getElementById('demoSpins');
+        const demoSpinsCountElement = document.getElementById('demoSpinsCount');
+        const totalWonElement = document.getElementById('totalWon');
+        const totalGamesElement = document.getElementById('totalGames');
+        const spinButton = document.getElementById('spinButton');
+        const demoSpinButton = document.getElementById('demoSpinButton');
+        const backButton = document.getElementById('backButton');
+        const cashoutButton = document.getElementById('cashoutButton');
+        const newGameButton = document.getElementById('newGameButton');
+        const mineFieldElement = document.getElementById('mineField');
+        const withdrawBtn = document.getElementById('withdrawBtn');
+        const withdrawModal = document.getElementById('withdrawModal');
+        const confirmWithdraw = document.getElementById('confirmWithdraw');
+        const cancelWithdraw = document.getElementById('cancelWithdraw');
+        const withdrawAmountBtns = document.querySelectorAll('.withdraw-amount-btn');
+        const reels = [
+            document.getElementById('reel1'),
+            document.getElementById('reel2'),
+            document.getElementById('reel3')
+        ];
+
+        // GitHub API функции
+        async function saveUserData() {
+            try {
+                const response = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `token ${GITHUB_CONFIG.token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+
+                let sha = null;
+                let allUsers = { users: {} };
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const content = atob(data.content);
+                    allUsers = JSON.parse(content);
+                    sha = data.sha;
+                }
+
+                // Обновляем данные пользователя
+                userData.updated_at = new Date().toISOString();
+                allUsers.users[userData.user_id] = userData;
+
+                // Сохраняем обратно
+                const updateResponse = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${GITHUB_CONFIG.token}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: `Update user data for ${userData.user_id}`,
+                        content: btoa(JSON.stringify(allUsers, null, 2)),
+                        sha: sha
+                    })
+                });
+
+                if (!updateResponse.ok) {
+                    throw new Error('Failed to save data');
+                }
+
+                console.log('Data saved successfully');
+            } catch (error) {
+                console.error('Error saving data:', error);
+                // В реальном приложении здесь должна быть обработка ошибок
+            }
+        }
+
+        async function loadUserData() {
+            try {
+                const response = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`, {
+                    headers: {
+                        'Authorization': `token ${GITHUB_CONFIG.token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const content = atob(data.content);
+                    const allUsers = JSON.parse(content);
+                    
+                    if (allUsers.users && allUsers.users[userData.user_id]) {
+                        userData = allUsers.users[userData.user_id];
+                        updateUI();
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
+                // Используем данные по умолчанию
+            }
+        }
+
+        // Функция для показа экрана
+        function showScreen(screenName) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.add('hidden');
+                screen.classList.remove('active');
+            });
+            
+            const targetScreen = document.getElementById(screenName + 'Screen');
+            if (targetScreen) {
+                targetScreen.classList.remove('hidden');
+                setTimeout(() => {
+                    targetScreen.classList.add('active');
+                }, 10);
+            }
+            
+            if (screenName === 'main') {
+                backButton.classList.add('hidden');
+            } else {
+                backButton.classList.remove('hidden');
+            }
+            
+            currentScreen = screenName;
+        }
+
+        // Функция для обновления UI
+        function updateUI() {
+            balanceElement.textContent = userData.balance;
+            if (currentBalanceElement) currentBalanceElement.textContent = userData.balance;
+            if (minesBalanceElement) minesBalanceElement.textContent = userData.balance;
+            demoSpinsElement.textContent = userData.demo_spins_available;
+            demoSpinsCountElement.textContent = userData.demo_spins_available;
+            
+            const totalWon = userData.game_stats.slots.total_won + userData.game_stats.mines.total_won;
+            const totalGames = userData.game_stats.slots.total_spins + userData.game_stats.mines.games_played;
+            
+            totalWonElement.textContent = totalWon + " ⭐";
+            totalGamesElement.textContent = totalGames;
+        }
+
+        // Функции для игры "Слоты"
+        function getRandomFruit() {
+            const fruits = ['🍒', '🍋', '🍊', '🍇', '🍉', '🍓'];
+            const weights = [30, 25, 20, 15, 7, 3];
+            
+            const random = Math.random() * 100;
+            let weightSum = 0;
+            
+            for (let i = 0; i < fruits.length; i++) {
+                weightSum += weights[i];
+                if (random <= weightSum) {
+                    return fruits[i];
+                }
+            }
+            
+            return fruits[0];
+        }
+
+        function startFastSpin(reel) {
+            reel.classList.add('reel-spinning');
+        }
+
+        function stopReel(reel, fruit, delay) {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    reel.classList.remove('reel-spinning');
+                    
+                    const items = reel.children;
+                    let targetPosition = 0;
+                    for (let i = 0; i < items.length; i++) {
+                        if (items[i].textContent === fruit) {
+                            targetPosition = i;
+                            break;
+                        }
+                    }
+                    
+                    const offset = -targetPosition * 60;
+                    reel.style.transition = 'transform 0.8s cubic-bezier(0.2, 0.8, 0.3, 1)';
+                    reel.style.transform = `translateY(${offset}px)`;
+                    
+                    resolve(fruit);
+                }, delay);
+            });
+        }
+
+        function spin() {
+            if (isSpinning) return;
+            
+            if (!isDemoSpin && userData.balance < 1) {
+                showNotification('Недостаточно звезд!', 'error');
+                return;
+            }
+
+            if (isDemoSpin && userData.demo_spins_available <= 0) {
+                showNotification('Демо-прокруты закончились!', 'error');
+                return;
+            }
+
+            isSpinning = true;
+            spinButton.disabled = true;
+            demoSpinButton.disabled = true;
+
+            if (!isDemoSpin) {
+                userData.balance -= 1;
+                userData.game_stats.slots.total_spins++;
+            } else {
+                userData.demo_spins_available--;
+                userData.game_stats.slots.demo_spins_used++;
+            }
+
+            updateUI();
+            saveUserData();
+
+            winAmountElement.textContent = '0 ⭐';
+            multiplierElement.textContent = 'x1';
+
+            const results = [
+                getRandomFruit(),
+                getRandomFruit(),
+                getRandomFruit()
+            ];
+
+            startFastSpin(reels[0]);
+            startFastSpin(reels[1]);
+            startFastSpin(reels[2]);
+
+            stopReel(reels[0], results[0], 1000);
+            stopReel(reels[1], results[1], 1500);
+            stopReel(reels[2], results[2], 2000).then(() => {
+                checkResult(results);
+                isSpinning = false;
+                spinButton.disabled = false;
+                demoSpinButton.disabled = false;
+                isDemoSpin = false;
+            });
+        }
+
+        function checkResult(results) {
+            const payouts = {
+                '🍒🍒🍒': 5,
+                '🍋🍋🍋': 10,
+                '🍊🍊🍊': 15,
+                '🍇🍇🍇': 20,
+                '🍉🍉🍉': 30,
+                '🍓🍓🍓': 50
+            };
+
+            const combination = results.join('');
+            let winMultiplier = payouts[combination] || 0;
+            const winAmount = winMultiplier;
+
+            if (winAmount > 0 && !isDemoSpin) {
+                userData.balance += winAmount;
+                userData.game_stats.slots.wins++;
+                userData.game_stats.slots.total_won += winAmount;
+                
+                winAmountElement.textContent = winAmount + " ⭐";
+                multiplierElement.textContent = `x${winMultiplier}`;
+                winAmountElement.classList.add('win-animation');
+                showNotification(`Поздравляем! Вы выиграли ${winAmount} звезд!`, 'success');
+                
+                setTimeout(() => {
+                    winAmountElement.classList.remove('win-animation');
+                }, 1500);
+            } else if (winAmount > 0 && isDemoSpin) {
+                winAmountElement.textContent = winAmount + " ⭐ (демо)";
+                multiplierElement.textContent = `x${winMultiplier}`;
+                showNotification(`Демо: выигрыш ${winAmount} звезд!`, 'info');
+            } else {
+                userData.game_stats.slots.losses++;
+                showNotification('Повезет в следующий раз!', 'info');
+            }
+
+            updateUI();
+            saveUserData();
+        }
+
+        // Функции для игры "Минёр"
+        function generateMineField() {
+            mineField = Array(25).fill('empty');
+            gemsFound = 0;
+            minesMultiplier = 1;
+
+            let minesPlaced = 0;
+            while (minesPlaced < 5) {
+                const randomIndex = Math.floor(Math.random() * 25);
+                if (mineField[randomIndex] === 'empty') {
+                    mineField[randomIndex] = 'mine';
+                    minesPlaced++;
+                }
+            }
+
+            let gemsPlaced = 0;
+            while (gemsPlaced < 10) {
+                const randomIndex = Math.floor(Math.random() * 25);
+                if (mineField[randomIndex] === 'empty') {
+                    mineField[randomIndex] = 'gem';
+                    gemsPlaced++;
+                }
+            }
+
+            renderMineField();
+            updateMinesUI();
+        }
+
+        function renderMineField() {
+            mineFieldElement.innerHTML = '';
+            
+            for (let i = 0; i < 25; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'mine-cell';
+                cell.dataset.index = i;
+                cell.addEventListener('click', () => revealCell(i));
+                mineFieldElement.appendChild(cell);
+            }
+        }
+
+        function revealCell(index) {
+            if (!minesGameActive || mineField[index] === 'revealed') return;
+
+            const cell = mineFieldElement.children[index];
+            cell.classList.add('revealed');
+
+            if (mineField[index] === 'mine') {
+                cell.classList.add('mine');
+                minesGameActive = false;
+                userData.game_stats.mines.losses++;
+                showNotification('Вы наткнулись на мину! Игра окончена.', 'error');
+                cashoutButton.disabled = true;
+            } else if (mineField[index] === 'gem') {
+                cell.classList.add('gem');
+                gemsFound++;
+                minesMultiplier *= 2;
+                updateMinesUI();
+                showNotification(`Найден алмаз! Множитель: x${minesMultiplier}`, 'success');
+            }
+
+            mineField[index] = 'revealed';
+
+            if (gemsFound === 10) {
+                minesGameActive = false;
+                cashoutButton.disabled = true;
+                showNotification('Поздравляем! Вы нашли все алмазы!', 'success');
+                cashout();
+            }
+
+            saveUserData();
+        }
+
+        function updateMinesUI() {
+            gemsFoundElement.textContent = gemsFound;
+            minesMultiplierElement.textContent = `x${minesMultiplier.toFixed(1)}`;
+            maxWinElement.textContent = (20 * minesMultiplier).toLocaleString() + " ⭐";
+        }
+
+        function startMinesGame() {
+            if (userData.balance < 20) {
+                showNotification('Недостаточно звезд! Нужно 20⭐', 'error');
+                return;
+            }
+
+            userData.balance -= 20;
+            userData.game_stats.mines.games_played++;
+            updateUI();
+            saveUserData();
+
+            minesGameActive = true;
+            generateMineField();
+            cashoutButton.disabled = false;
+            showNotification('Игра началась! Ищите алмазы, избегая мин.', 'info');
+        }
+
+        function cashout() {
+            if (!minesGameActive) return;
+
+            const winAmount = Math.floor(20 * minesMultiplier);
+            userData.balance += winAmount;
+            userData.game_stats.mines.wins++;
+            userData.game_stats.mines.total_won += winAmount;
+            
+            updateUI();
+            saveUserData();
+
+            minesGameActive = false;
+            cashoutButton.disabled = true;
+
+            showNotification(`Вы забрали выигрыш: ${winAmount} звезд!`, 'success');
+        }
+
+        // Функции для вывода средств
+        function showWithdrawModal() {
+            withdrawModal.classList.remove('hidden');
+        }
+
+        function hideWithdrawModal() {
+            withdrawModal.classList.add('hidden');
+            selectedWithdrawAmount = 0;
+            withdrawAmountBtns.forEach(btn => {
+                btn.classList.remove('bg-gradient-to-r', 'from-yellow-700', 'to-yellow-900');
+                btn.classList.add('bg-gradient-to-r', 'from-gray-700', 'to-gray-900');
+            });
+        }
+
+        function processWithdraw() {
+            if (selectedWithdrawAmount === 0) {
+                showNotification('Выберите сумму для вывода', 'error');
+                return;
+            }
+
+            if (userData.balance < selectedWithdrawAmount) {
+                showNotification('Недостаточно средств для вывода', 'error');
+                return;
+            }
+
+            userData.balance -= selectedWithdrawAmount;
+            userData.withdrawal_history.push({
+                amount: selectedWithdrawAmount,
+                date: new Date().toISOString(),
+                status: 'pending'
+            });
+
+            updateUI();
+            saveUserData();
+            hideWithdrawModal();
+
+            showNotification(`Запрос на вывод ${selectedWithdrawAmount} звезд отправлен!`, 'success');
+        }
+
+        // Функция для показа уведомлений
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            const bgColor = type === 'success' ? 'from-green-700 to-green-900' : 
+                           type === 'error' ? 'from-red-700 to-red-900' : 
+                           'from-blue-700 to-blue-900';
+            
+            notification.className = `fixed top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r ${bgColor} text-white p-3 rounded-lg shadow-lg z-50 transition-all duration-300 opacity-0 max-w-xs text-center mobile-text-sm`;
+            notification.innerHTML = `<div class="flex items-center justify-center space-x-2"><i class="fas fa-${type === 'success' ? 'trophy' : type === 'error' ? 'exclamation-triangle' : 'info-circle'}"></i><span>${message}</span></div>`;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.remove('opacity-0');
+                notification.classList.add('opacity-100');
+            }, 10);
+            
+            setTimeout(() => {
+                notification.classList.remove('opacity-100');
+                notification.classList.add('opacity-0');
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // Инициализация игры
+        document.addEventListener('DOMContentLoaded', function() {
+            // Загружаем данные пользователя
+            loadUserData();
+
+            // Обработчики для выбора игры
+            document.querySelectorAll('.game-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const game = this.dataset.game;
+                    if (game === 'slots') {
+                        showScreen('slots');
+                    } else if (game === 'mines') {
+                        if (userData.balance >= 20) {
+                            showScreen('mines');
+                        } else {
+                            showNotification('Недостаточно звезд! Нужно 20⭐', 'error');
+                        }
+                    }
+                });
+            });
+
+            // Демо-кнопка для слотов
+            document.querySelector('.demo-slots-btn').addEventListener('click', function(e) {
+                e.stopPropagation();
+                showScreen('slots');
+            });
+
+            // Обработчик кнопки "Назад"
+            backButton.addEventListener('click', function() {
+                showScreen('main');
+            });
+
+            // Обработчики для слотов
+            spinButton.addEventListener('click', () => {
+                isDemoSpin = false;
+                spin();
+            });
+
+            demoSpinButton.addEventListener('click', () => {
+                isDemoSpin = true;
+                spin();
+            });
+
+            // Обработчики для игры "Минёр"
+            cashoutButton.addEventListener('click', cashout);
+            newGameButton.addEventListener('click', startMinesGame);
+
+            // Обработчики для вывода средств
+            withdrawBtn.addEventListener('click', showWithdrawModal);
+            cancelWithdraw.addEventListener('click', hideWithdrawModal);
+            confirmWithdraw.addEventListener('click', processWithdraw);
+
+            withdrawAmountBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    selectedWithdrawAmount = parseInt(this.dataset.amount);
+                    withdrawAmountBtns.forEach(b => {
+                        b.classList.remove('bg-gradient-to-r', 'from-yellow-700', 'to-yellow-900');
+                        b.classList.add('bg-gradient-to-r', 'from-gray-700', 'to-gray-900');
+                    });
+                    this.classList.remove('bg-gradient-to-r', 'from-gray-700', 'to-gray-900');
+                    this.classList.add('bg-gradient-to-r', 'from-yellow-700', 'to-yellow-900');
+                });
+            });
+
+            // Оптимизация для мобильных устройств
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                document.body.classList.add('mobile-optimized');
+                
+                let lastTouchEnd = 0;
+                document.addEventListener('touchend', function (event) {
+                    const now = (new Date()).getTime();
+                    if (now - lastTouchEnd <= 300) {
+                        event.preventDefault();
+                    }
+                    lastTouchEnd = now;
+                }, false);
+            }
+
+            // Улучшенная обработка касаний для кнопок
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(button => {
+                button.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(0.95)';
+                });
+                
+                button.addEventListener('touchend', function() {
+                    this.style.transform = '';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
